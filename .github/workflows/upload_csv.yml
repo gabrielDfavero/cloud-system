@@ -1,0 +1,26 @@
+name: Upload CSV para Azure
+
+on:
+  push:
+    paths:
+      - '**.csv'  # O fluxo só roda se você mexer em arquivos CSV
+
+jobs:
+  enviar-arquivo:
+    runs-on: ubuntu-latest
+    steps:
+    # 1. Baixa seu código
+    - name: Checkout do código
+      uses: actions/checkout@v3
+
+    # 2. Faz o login e upload usando a CLI do Azure
+    - name: Upload para o Blob Storage
+      uses: azure/CLI@v1
+      with:
+        inlineScript: |
+          az storage blob upload-batch \
+            --account-name clouddatasystem2 \
+            --destination meus-csvs \
+            --source . \
+            --connection-string "${{ secrets.AZURE_CONNECTION_STRING }}" \
+            --pattern "*.csv"
