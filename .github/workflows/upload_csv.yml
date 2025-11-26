@@ -18,6 +18,7 @@ jobs:
       uses: azure/CLI@v1
       with:
         inlineScript: |
+          cd data
           az storage blob upload-batch \
             --account-name clouddatasystem2 \
             --destination meus-csvs \
